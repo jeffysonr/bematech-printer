@@ -1,0 +1,53 @@
+<root cut="full">
+  <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }}</line>
+  <line align="center" fontSize="expanded">{{ order.created_at }}</line>
+  <line></line>
+  {{#each order.cart.products }}
+    <line></line>
+    <line display="inline" textTransform="bold">{{ inc @index }}. </line>
+    <line>{{this.name}}</line>
+    <line display="inline" textTransform="bold">Quantidade: </line>
+    <line>{{this.amount}}un.</line>
+
+    {{#if this.note }}
+      <line textTransform="bold" display="inline">Observação: </line>
+      <line>{{ this.note }}</line>
+    {{/if}}
+
+    {{#if this.addons_base.length }}
+      {{#each this.addons_base }}
+        <line align="right">{{ this.name }}</line>
+      {{/each}}
+    {{/if}}
+
+    {{#if this.addons_opt.length }}
+      {{#each this.addons_opt }}
+        <line align="right" textTransform="bold" display="inline" >ADICIONAL </line>
+        <line align="right" >{{ this.name }}</line>
+      {{/each}}
+    {{/if}}
+
+    {{#if this.addons_to_remove.length }}
+      {{#compare this.addons_to_remove.length "<" this.addons_to_put.length }}
+        {{#each this.addons_to_remove }}
+          <line align="right" textTransform="bold" display="inline" >SEM </line>
+          <line align="right" >{{ this.name }}</line>
+        {{/each}}
+      {{/compare}}
+    {{/if}}
+
+    {{#if this.addons_to_put.length }}
+      {{#compare this.addons_to_put.length "<" this.addons_to_remove.length }}
+        {{#each this.addons_to_put }}
+          {{#compare this.price "==" "0.0"}}
+            <line align="right" textTransform="bold" display="inline" >COM </line>
+          <line align="right" >{{ this.name }}</line>
+          {{/compare}}
+        {{/each}}
+      {{/compare}}
+    {{/if}}
+    {{#compare (inc @index) "!=" ../this.order.cart.products.length }}
+      <line>-------------------------------------------------</line>
+    {{/compare}}
+  {{/each}}
+</root>

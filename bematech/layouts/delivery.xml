@@ -1,0 +1,90 @@
+<root cut="full">
+  <line align="center" textTransform="bold">{{ company.name }}</line>
+  <line align="center" textTransform="bold">{{ company.slogan }}</line>
+  <line></line>
+  <line align="center" textTransform="bold" fontSize="expanded">Pedido: {{ order.public_number }}</line>
+  <line></line>
+
+  <line display="inline" textTransform="bold">Pedido em: </line>
+  <line>{{ order.created_at }}</line>
+  {{#if order.scheduled_for }}
+  <line display="inline" textTransform="bold">Entrega agendada para: </line>
+  <line>{{ order.scheduled_for}}</line>
+  <line>-------------------------------------------------</line>
+  {{/if}}
+
+  <line display="inline" textTransform="bold">Cliente: </line>
+  <line>{{ order.costumer.name }}</line>
+  <line display="inline" textTransform="bold">Endereço: </line>
+  <line>{{ order.full_address }}</line>
+  {{#if order.costumer.cellphone }}
+    {{#if order.costumer.phone }}
+      <line display="inline" textTransform="bold">Telefones: </line>
+      <line>{{ order.costumer.cellphone }} / {{ order.costumer.phone }}</line>
+    {{else}}
+      <line display="inline" textTransform="bold">Telefone: </line>
+      <line>{{ order.costumer.cellphone }}</line>
+    {{/if}}
+  {{/if}}
+
+  <line>-------------------------------------------------</line>
+  <line textTransform="bold">Produtos do pedido:</line>
+  {{#each order.cart.products }}
+    <line></line>
+    <line display="inline" textTransform="bold">{{ inc @index }}. </line>
+    <line>{{this.name}}</line>
+
+    <line display="inline" textTransform="bold">Quantidade: </line>
+    <line display="inline">{{this.amount}}un.</line>
+    <line display="inline"> / </line>
+    <line display="inline" textTransform="bold">Subtotal: </line>
+    <line>R${{ round this.total }}</line>
+    {{#if this.note }}
+      <line textTransform="bold" display="inline">Observação: </line>
+      <line>{{ this.note }}</line>
+    {{/if}}
+    {{#if this.addons_opt.length }}
+      <line display="inline" textTransform="bold">Extras: </line>
+      {{#each this.addons_opt }}
+        <line display="inline">{{ this.name }}(R${{ round this.price }})</line>
+        {{#compare ../this.addons_opt.length "!=" (inc @index)}}
+          <line display="inline"> / </line>
+        {{/compare}}
+      {{/each}}
+      <line></line>
+    {{/if}}
+  {{/each}}
+
+  {{#if order.note }}
+  <line>-------------------------------------------------</line>
+  <line textTransform="bold" display="inline">Observação do pedido: </line>
+  <line>{{ order.note }}</line>
+  {{/if}}
+
+  <line>-------------------------------------------------</line>
+  <line display="inline" textTransform="bold">Forma de pagamento: </line>
+  <line>{{ order.payment_method.name }}</line>
+
+  {{#if order.change }}
+  <line>-------------------------------------------------</line>
+  <line display="inline" textTransform="bold">Total pago pelo cliente: </line>
+  <line>R${{ round order.change }}</line>
+  <line display="inline" textTransform="bold">Total de troco p/ levar: </line>
+  <line>R${{ round order.change_to_send }}</line>
+  {{/if}}
+
+  <line>-------------------------------------------------</line>
+  <line display="inline" textTransform="bold">Valor total: </line>
+  <line>R${{ round order.total }}</line>
+
+  <line display="inline" textTransform="bold">Valor da entrega: </line>
+  <line>R${{ round order.shipping }}</line>
+  <line>-------------------------------------------------</line>
+
+  {{#if order.courier }}
+  <line display="inline" textTransform="bold">Entregador: </line>
+  <line>{{ order.courier.name }}</line>
+  <line>-------------------------------------------------</line>
+  {{/if}}
+
+</root>
