@@ -15,6 +15,8 @@ module.exports = {
   // @description Realiza impressão
   // @params {Object} options - Detalhes da impressão, como IP / Porta da impressora, dados de template e layout de impressão
   print(options) {
+    socket.emit('print:start');
+
     this._validatePrint(options).then(() => {
 
       // Notifica recebimento de impressão
@@ -24,6 +26,7 @@ module.exports = {
 
       this._loadPrinter(options).then((printer) => {
         return printer.print(options).then(() => {
+          socket.emit('print:end');
           io.emit('print:message', { description: 'Impressão realizada com sucesso', time: new Date(), type: 'success' });
         });
       }, (err) => {
@@ -43,7 +46,6 @@ module.exports = {
 
     // Envia mensagem informando que socket está conectado
     socket.emit('socket:connected', {});
-    console.log('Socket conectado!');
 
     socket.on('print', this.print.bind(this));
   },
