@@ -61,6 +61,14 @@ module.exports = {
         return reject({ description: 'Para imprimir deve ser passado um objeto com dados da impressora', code: 100 });
       }
 
+      if(!options.copies) {
+        options.copies = 1;
+      }
+
+      if(!Number.isInteger(options.copies)) {
+        return reject({ description: 'Número de cópias deve ser um número inteiro', code: 104 });
+      }
+
       // Verifica se há IP
       if(!options.printer.ip) {
         return reject({ description: 'Para imprimir deve ser informado o IP da impressora', code: 101 });

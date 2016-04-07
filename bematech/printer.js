@@ -41,7 +41,11 @@ let Printer = class Printer {
   print(options) {
     return new Promise((resolve, reject) => {
       return compiler.compile(options).then((content) => {
-        return resolve(this.client.write(content));
+        for(let i = 0; i < options.copies; i++) {
+          this.client.write(content);
+        }
+
+        return resolve();
       });
     });
   }

@@ -16,7 +16,7 @@
   <line display="inline" textTransform="bold">Cliente: </line>
   <line>{{ order.costumer.name }}</line>
   <line display="inline" textTransform="bold">Endereço: </line>
-  <line>{{ order.full_address }}</line>
+  <line>{{ order.address.full }}</line>
   {{#if order.costumer.cellphone }}
     {{#if order.costumer.phone }}
       <line display="inline" textTransform="bold">Telefones: </line>
@@ -63,7 +63,39 @@
 
   <line>-------------------------------------------------</line>
   <line display="inline" textTransform="bold">Forma de pagamento: </line>
-  <line>{{ order.payment_method.name }}</line>
+  {{#compare order.payment_method.alias "===" 'money'}}
+  <line>Dinheiro</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'visa_credit'}}
+  <line>Visa crédito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'visa_debit'}}
+  <line>Visa débito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'master_debit'}}
+  <line>Master débito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'master_credit'}}
+  <line>Master crédito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'elo_credit'}}
+  <line>Elo crédito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'elo_debit'}}
+  <line>Elo débito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'american_express'}}
+  <line>American express</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'sodexo'}}
+  <line>Sodexo</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'ticket'}}
+  <line>Ticket</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'alelo'}}
+  <line>Alelo</line>
+  {{/compare}}
 
   {{#if order.change }}
   <line>-------------------------------------------------</line>
