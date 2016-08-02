@@ -1,53 +1,74 @@
 <root cut="full">
-  <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }}</line>
-  <line align="center" fontSize="expanded">{{ order.created_at }}</line>
-  <line></line>
-  {{#each order.cart.products }}
+  {{#compare order.order_type.type "!==" 'local' }}
     <line></line>
-    <line display="inline" textTransform="bold">{{ inc @index }}. </line>
-    <line>{{this.name}}</line>
-    <line display="inline" textTransform="bold">Quantidade: </line>
-    <line>{{this.amount}}un.</line>
+    <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }}</line>
+    <line></line>
+    <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
+    <line></line>
+  {{/compare}}
+  {{#compare order.order_type.alias "===" 'local' }}
+    <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }} - BALCÃO</line>
+    <line></line>
+    <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
+    <line></line>
+  {{/compare}}
+  {{#compare order.order_type.type "===" 'local_to_go' }}
+    <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }} - VIAGEM</line>
+    <line></line>
+    <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
+    <line></line>
+  {{/compare}}
+  {{#compare order.note "!==" null }}
+    <line></line>
+    <line display="inline" textTransform="bold">Observação: </line>
+    <line textTransform="bold">{{ order.note }}</line>
+    <line>-------------------------------------------------</line>
+    <line></line>
+  {{/compare}}
+  {{#each order.cart.cart_items }}
+    {{#unless this.product.hide_on_kitchen_card }}
+      <line display="inline" fontSize="large">{{this.amount}}x </line>
+      <line fontSize="large">{{this.product.name}}</line>
 
-    {{#if this.note }}
-      <line textTransform="bold" display="inline">Observação: </line>
-      <line>{{ this.note }}</line>
-    {{/if}}
+      {{#if this.note }}
+        <line textTransform="bold" display="inline">Observação: </line>
+        <line>{{ this.note }}</line>
+      {{/if}}
 
-    {{#if this.addons_base.length }}
-      {{#each this.addons_base }}
-        <line align="right">{{ this.name }}</line>
-      {{/each}}
-    {{/if}}
-
-    {{#if this.addons_opt.length }}
-      {{#each this.addons_opt }}
-        <line align="right" textTransform="bold" display="inline" >ADICIONAL </line>
-        <line align="right" >{{ this.name }}</line>
-      {{/each}}
-    {{/if}}
-
-    {{#if this.addons_to_remove.length }}
-      {{#compare this.addons_to_remove.length "<" this.addons_to_put.length }}
-        {{#each this.addons_to_remove }}
-          <line align="right" textTransform="bold" display="inline" >SEM </line>
-          <line align="right" >{{ this.name }}</line>
+      {{#if this.addons_base.length }}
+        {{#each this.addons_base }}
+          <line align="right">{{ this.name }}</line>
         {{/each}}
-      {{/compare}}
-    {{/if}}
+        <line></line>
+      {{/if}}
 
-    {{#if this.addons_to_put.length }}
-      {{#compare this.addons_to_put.length "<" this.addons_to_remove.length }}
+      {{#if this.addons_opt.length }}
+        {{#each this.addons_opt }}
+          <line align="right" textTransform="bold" display="inline">+ </line>
+          <line align="right" fontSize="large">{{ this.name }}</line>
+        {{/each}}
+        <line></line>
+      {{/if}}
+
+      {{#if this.addons_to_remove.length }}
+        {{#each this.addons_to_remove }}
+          <line align="right" textTransform="bold" display="inline">SEM </line>
+          <line align="right">{{ this.name }}</line>
+        {{/each}}
+        <line></line>
+      {{/if}}
+
+      {{#if this.addons_to_put.length }}
         {{#each this.addons_to_put }}
-          {{#compare this.price "==" "0.0"}}
-            <line align="right" textTransform="bold" display="inline" >COM </line>
-          <line align="right" >{{ this.name }}</line>
+          {{#compare this.total "==" "0.0"}}
+            <line align="right" textTransform="bold" display="inline">COM </line>
+            <line align="right">{{ this.name }}</line>
           {{/compare}}
         {{/each}}
+      {{/if}}
+      {{#compare (inc @index) "!=" ../this.order.cart.products.length }}
+        <line>-------------------------------------------------</line>
       {{/compare}}
-    {{/if}}
-    {{#compare (inc @index) "!=" ../this.order.cart.products.length }}
-      <line>-------------------------------------------------</line>
-    {{/compare}}
+    {{/unless}}
   {{/each}}
 </root>

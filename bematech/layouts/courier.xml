@@ -1,0 +1,82 @@
+<root cut="full">
+  <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }}</line>
+  <line align="center" textTransform="bold" fontSize="expanded">{{ order.public_number }}</line>
+  <line></line>
+  <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
+  <line></line>
+  <line display="inline" textTransform="bold">Cliente: </line>
+  <line>{{ order.costumer.name }}</line>
+  <line display="inline" textTransform="bold">Contato: </line>
+  <line>{{ order.costumer_contact }}</line>
+  <line>-------------------------------------------------</line>
+  <line display="inline" textTransform="bold">Endereço: </line>
+  <line fontSize="large">{{ order.address.completed_address }}</line>
+
+  {{#each order.cart.cart_items }}
+    {{#if this.product.acts_like_beverage }}
+      <line>-------------------------------------------------</line>
+      <line>{{this.product.name}}</line>
+
+      <line display="inline" textTransform="bold">Quantidade: </line>
+      <line display="inline">{{this.amount}}un.</line>
+      <line display="inline"> / </line>
+      <line display="inline" textTransform="bold">Subtotal: </line>
+      {{#compare this.total "===" '0.0'}}
+      <line textTransform="bold">Grátis</line>
+      {{/compare}}
+      {{#compare this.total "!==" '0.0'}}
+      <line>R${{ round this.total }}</line>
+      {{/compare}}
+    {{/if }}
+  {{/each}}
+
+  {{#if order.note }}
+  <line>-------------------------------------------------</line>
+  <line textTransform="bold" display="inline">Observação do pedido: </line>
+  <line>{{ order.note }}</line>
+  {{/if}}
+
+  <line>-------------------------------------------------</line>
+  <line display="inline" textTransform="bold">Forma de pagamento: </line>
+  {{#compare order.payment_method.alias "===" 'money'}}
+  <line fontSize="large">Dinheiro</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'visa_credit'}}
+  <line fontSize="large">Visa crédito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'visa_debit'}}
+  <line fontSize="large">Visa débito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'master_debit'}}
+  <line fontSize="large">Master débito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'master_credit'}}
+  <line fontSize="large">Master crédito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'elo_credit'}}
+  <line fontSize="large">Elo crédito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'elo_debit'}}
+  <line fontSize="large">Elo débito</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'american_express'}}
+  <line fontSize="large">American express</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'sodexo'}}
+  <line fontSize="large">Sodexo</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'ticket'}}
+  <line fontSize="large">Ticket</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'ifood'}}
+  <line fontSize="large">Já pago via IFOOD</line>
+  {{/compare}}
+  <line>-------------------------------------------------</line>
+  <line display="inline" textTransform="bold">Valor total: </line>
+  <line fontSize="large">R${{ round order.total }}</line>
+  <line>-------------------------------------------------</line>
+  {{#if order.change }}
+    <line display="inline" textTransform="bold">Troco: </line>
+    <line fontSize="large">R${{ round order.change }} (R${{ round order.change_to_send }})</line>
+  {{/if}}
+</root>

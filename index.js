@@ -26,7 +26,7 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600, title: "Sistema de Impressão - Food.IO"});
+  mainWindow = new BrowserWindow({width: 800, height: 600, title: "Sistema de Impressão - Speedy Food - v1.2.0"});
 
   mainWindow.minimize()
 

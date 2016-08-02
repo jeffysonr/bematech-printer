@@ -2,11 +2,11 @@
   <line align="center" textTransform="bold">{{ company.name }}</line>
   <line align="center" textTransform="bold">{{ company.slogan }}</line>
   <line></line>
-  <line align="center" textTransform="bold" fontSize="expanded">Pedido: {{ order.public_number }}</line>
+  <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }}</line>
+  <line align="center" textTransform="bold" fontSize="expanded">{{ order.public_number }}</line>
   <line></line>
-
-  <line display="inline" textTransform="bold">Pedido em: </line>
-  <line>{{ order.created_at }}</line>
+  <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
+  <line></line>
   {{#if order.scheduled_for }}
   <line display="inline" textTransform="bold">Entrega agendada para: </line>
   <line>{{ order.scheduled_for}}</line>
@@ -15,44 +15,100 @@
 
   <line display="inline" textTransform="bold">Cliente: </line>
   <line>{{ order.costumer.name }}</line>
+  <line>-------------------------------------------------</line>
+  <line display="inline" textTransform="bold">Forma do pedido: </line>
+  {{#compare order.order_type.alias "===" 'express_delivery_online' }}
+  <line fontSize="large">Via site</line>
+  {{/compare}}
+  {{#compare order.order_type.alias "===" 'express_delivery_phone' }}
+  <line fontSize="large">Via telefone</line>
+  {{/compare}}
+  {{#compare order.order_type.alias "===" 'express_delivery_whatsapp' }}
+  <line fontSize="large">Via whatsapp</line>
+  {{/compare}}
+  {{#compare order.order_type.alias "===" 'express_delivery_facebook' }}
+  <line fontSize="large">Via facebook</line>
+  {{/compare}}
+  {{#compare order.order_type.alias "===" 'express_delivery_ifood' }}
+  <line fontSize="large">Via IFOOD</line>
+  <line textTransform="bold">Pedindo pelo site você tem acesso a muitos descontos e ao nosso programa de recompensas. Só nesse pedido você deixou de ganhar {{ order.cart.club_points }} speedy points. </line>
+  {{/compare}}
+  <line>-------------------------------------------------</line>
+
   <line display="inline" textTransform="bold">Endereço: </line>
-  <line>{{ order.address.full }}</line>
-  {{#if order.costumer.cellphone }}
-    {{#if order.costumer.phone }}
-      <line display="inline" textTransform="bold">Telefones: </line>
-      <line>{{ order.costumer.cellphone }} / {{ order.costumer.phone }}</line>
-    {{else}}
-      <line display="inline" textTransform="bold">Telefone: </line>
-      <line>{{ order.costumer.cellphone }}</line>
-    {{/if}}
-  {{/if}}
+  <line fontSize="large">{{ order.address.completed_address }}</line>
 
   <line>-------------------------------------------------</line>
   <line textTransform="bold">Produtos do pedido:</line>
-  {{#each order.cart.products }}
-    <line></line>
-    <line display="inline" textTransform="bold">{{ inc @index }}. </line>
-    <line>{{this.name}}</line>
+  {{#each order.cart.cart_items }}
+    {{#unless this.product.acts_like_beverage }}
+      {{#unless this.product.acts_like_extra }}
+        <line></line>
+        <line>{{this.product.name}}</line>
 
-    <line display="inline" textTransform="bold">Quantidade: </line>
-    <line display="inline">{{this.amount}}un.</line>
-    <line display="inline"> / </line>
-    <line display="inline" textTransform="bold">Subtotal: </line>
-    <line>R${{ round this.total }}</line>
-    {{#if this.note }}
-      <line textTransform="bold" display="inline">Observação: </line>
-      <line>{{ this.note }}</line>
-    {{/if}}
-    {{#if this.addons_opt.length }}
-      <line display="inline" textTransform="bold">Extras: </line>
-      {{#each this.addons_opt }}
-        <line display="inline">{{ this.name }}(R${{ round this.price }})</line>
-        {{#compare ../this.addons_opt.length "!=" (inc @index)}}
-          <line display="inline"> / </line>
+        <line display="inline" textTransform="bold">Quantidade: </line>
+        <line display="inline">{{this.amount}}un.</line>
+        <line display="inline"> / </line>
+        <line display="inline" textTransform="bold">Subtotal: </line>
+        {{#compare this.total "===" '0.0'}}
+        <line textTransform="bold">Grátis</line>
         {{/compare}}
-      {{/each}}
+        {{#compare this.total "!==" '0.0'}}
+        <line>R${{ round this.total }}</line>
+        {{/compare}}
+
+        {{#if this.note }}
+          <line textTransform="bold" display="inline">Observação: </line>
+          <line>{{ this.note }}</line>
+        {{/if}}
+        {{#if this.addons_opt.length }}
+          <line display="inline" textTransform="bold">Extras: </line>
+          {{#each this.addons_opt }}
+            <line display="inline">{{ this.amount }}x {{ this.name }}(R${{ round this.total }})</line>
+            {{#compare ../this.addons_opt.length "!=" (inc @index)}}
+              <line display="inline"> / </line>
+            {{/compare}}
+          {{/each}}
+          <line></line>
+        {{/if}}
+      {{/unless }}
+    {{/unless }}
+  {{/each}}
+
+  {{#each order.cart.cart_items }}
+    {{#if this.product.acts_like_extra }}
       <line></line>
-    {{/if}}
+      <line>{{this.product.name}}</line>
+
+      <line display="inline" textTransform="bold">Quantidade: </line>
+      <line display="inline">{{this.amount}}un.</line>
+      <line display="inline"> / </line>
+      <line display="inline" textTransform="bold">Subtotal: </line>
+      {{#compare this.total "===" '0.0'}}
+      <line textTransform="bold">Grátis</line>
+      {{/compare}}
+      {{#compare this.total "!==" '0.0'}}
+      <line>R${{ round this.total }}</line>
+      {{/compare}}
+    {{/if }}
+  {{/each}}
+
+  {{#each order.cart.cart_items }}
+    {{#if this.product.acts_like_beverage }}
+      <line></line>
+      <line>{{this.product.name}}</line>
+
+      <line display="inline" textTransform="bold">Quantidade: </line>
+      <line display="inline">{{this.amount}}un.</line>
+      <line display="inline"> / </line>
+      <line display="inline" textTransform="bold">Subtotal: </line>
+      {{#compare this.total "===" '0.0'}}
+      <line textTransform="bold">Grátis</line>
+      {{/compare}}
+      {{#compare this.total "!==" '0.0'}}
+      <line>R${{ round this.total }}</line>
+      {{/compare}}
+    {{/if }}
   {{/each}}
 
   {{#if order.note }}
@@ -64,59 +120,48 @@
   <line>-------------------------------------------------</line>
   <line display="inline" textTransform="bold">Forma de pagamento: </line>
   {{#compare order.payment_method.alias "===" 'money'}}
-  <line>Dinheiro</line>
+  <line fontSize="large">Dinheiro</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'visa_credit'}}
-  <line>Visa crédito</line>
+  <line fontSize="large">Visa crédito</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'visa_debit'}}
-  <line>Visa débito</line>
+  <line fontSize="large">Visa débito</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'master_debit'}}
-  <line>Master débito</line>
+  <line fontSize="large">Master débito</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'master_credit'}}
-  <line>Master crédito</line>
+  <line fontSize="large">Master crédito</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'elo_credit'}}
-  <line>Elo crédito</line>
+  <line fontSize="large">Elo crédito</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'elo_debit'}}
-  <line>Elo débito</line>
+  <line fontSize="large">Elo débito</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'american_express'}}
-  <line>American express</line>
+  <line fontSize="large">American express</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'sodexo'}}
-  <line>Sodexo</line>
+  <line fontSize="large">Sodexo</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'ticket'}}
-  <line>Ticket</line>
+  <line fontSize="large">Ticket</line>
   {{/compare}}
-  {{#compare order.payment_method.alias "===" 'alelo'}}
-  <line>Alelo</line>
+  {{#compare order.payment_method.alias "===" 'ifood'}}
+  <line fontSize="large">Já pago via IFOOD</line>
   {{/compare}}
-
-  {{#if order.change }}
-  <line>-------------------------------------------------</line>
-  <line display="inline" textTransform="bold">Total pago pelo cliente: </line>
-  <line>R${{ round order.change }}</line>
-  <line display="inline" textTransform="bold">Total de troco p/ levar: </line>
-  <line>R${{ round order.change_to_send }}</line>
-  {{/if}}
-
   <line>-------------------------------------------------</line>
   <line display="inline" textTransform="bold">Valor total: </line>
-  <line>R${{ round order.total }}</line>
-
-  <line display="inline" textTransform="bold">Valor da entrega: </line>
-  <line>R${{ round order.shipping }}</line>
+  <line fontSize="large">R${{ round order.total }}</line>
   <line>-------------------------------------------------</line>
-
-  {{#if order.courier }}
-  <line display="inline" textTransform="bold">Entregador: </line>
-  <line>{{ order.courier.name }}</line>
-  <line>-------------------------------------------------</line>
+  {{#if order.change }}
+    <line display="inline" textTransform="bold">Troco: </line>
+    <line fontSize="large">R${{ round order.change }} (R${{ round order.change_to_send }})</line>
   {{/if}}
-
+  <line>-------------------------------------------------</line>
+  <line display="inline">Ei </line>
+  <line display="inline" textTransform="bold">{{ order.costumer.first_name }}</line>
+  <line>, após receber seu pedido, que tal fazer uma avaliação do seu pedido?</line>
 </root>
