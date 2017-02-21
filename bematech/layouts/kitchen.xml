@@ -1,19 +1,22 @@
 <root cut="full">
-  {{#compare order.order_type.type "!==" 'local' }}
-    <line></line>
-    <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }}</line>
-    <line></line>
-    <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
-    <line></line>
-  {{/compare}}
   {{#compare order.order_type.alias "===" 'local' }}
     <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }} - BALCÃO</line>
     <line></line>
     <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
     <line></line>
   {{/compare}}
-  {{#compare order.order_type.type "===" 'local_to_go' }}
+  {{#compare order.order_type.alias "===" 'local_to_go' }}
     <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }} - VIAGEM</line>
+    <line></line>
+    <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
+    <line></line>
+  {{/compare}}
+  {{#compare order.order_type.alias "===" 'employee_meal' }}
+    <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }} - FUNCIONÁRIO</line>
+    <line></line>
+  {{/compare}}
+  {{#compare order.order_type.type "!==" 'local' }}
+    <line align="center" textTransform="bold" fontSize="expanded">#{{ order.store_number }}</line>
     <line></line>
     <line align="center" textTransform="bold" fontSize="expanded">{{ order.created_at }}</line>
     <line></line>
@@ -44,8 +47,8 @@
 
       {{#if this.addons_opt.length }}
         {{#each this.addons_opt }}
-          <line align="right" textTransform="bold" display="inline">+ </line>
-          <line align="right" fontSize="large">{{ this.name }}</line>
+          <line align="right" textTransform="bold" display="inline">+</line>
+          <line align="right" fontSize="large">{{ this.amount }}x {{ this.name }}</line>
         {{/each}}
         <line></line>
       {{/if}}
@@ -61,7 +64,7 @@
       {{#if this.addons_to_put.length }}
         {{#each this.addons_to_put }}
           {{#compare this.total "==" "0.0"}}
-            <line align="right" textTransform="bold" display="inline">COM </line>
+            <line align="right" textTransform="bold" display="inline">{{ this.amount }}x </line>
             <line align="right">{{ this.name }}</line>
           {{/compare}}
         {{/each}}

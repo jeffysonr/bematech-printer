@@ -65,18 +65,31 @@
   {{#compare order.payment_method.alias "===" 'sodexo'}}
   <line fontSize="large">Sodexo</line>
   {{/compare}}
-  {{#compare order.payment_method.alias "===" 'ticket'}}
-  <line fontSize="large">Ticket</line>
+  {{#compare order.payment_method.alias "===" 'green_card'}}
+  <line fontSize="large">Green Card</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'alelo_refeicao'}}
+  <line fontSize="large">Alelo refeição</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'alelo_alimentacao'}}
+  <line fontSize="large">Alelo alimentação</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'ticket_alimentacao'}}
+  <line fontSize="large">Ticket alimentação</line>
+  {{/compare}}
+  {{#compare order.payment_method.alias "===" 'ticket_refeicao'}}
+  <line fontSize="large">Ticket refeição</line>
   {{/compare}}
   {{#compare order.payment_method.alias "===" 'ifood'}}
-  <line fontSize="large">Já pago via IFOOD</line>
+  <line fontSize="large">Pago online (não cobrar)</line>
   {{/compare}}
+
   <line>-------------------------------------------------</line>
   <line display="inline" textTransform="bold">Valor total: </line>
   <line fontSize="large">R${{ round order.total }}</line>
   <line>-------------------------------------------------</line>
   {{#if order.change }}
     <line display="inline" textTransform="bold">Troco: </line>
-    <line fontSize="large">R${{ round order.change }} (R${{ round order.change_to_send }})</line>
+    <line fontSize="large">R${{ round order.change }} (Levar R${{ round order.change_to_send }})</line>
   {{/if}}
 </root>
