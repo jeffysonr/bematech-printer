@@ -6,7 +6,7 @@
 Tive a necessidade de integrar uma aplicação web com uma impressora térmica. Acabei escolhendo a bematech, por ser uma das líderes de mercado nesse setor. Na hora de desenvolver, senti que há uma carência na integração com a web, já que é algo mais avançado. Dessa forma foi criado esse pacote para você conseguir imprimir em sua bematech de um dispositivo na web.
 
 ### Onde testei
-No momento testei apenas na bematech 4200 com placa Ethernet. Infelizmente não tenho outros modelos da bematech para testar. Dessa forma, no momento só garanto suporte a esse modelo com placa de rede. USB infelizmente não testei também.
+No momento testei apenas na bematech 4200 com placa Ethernet. Infelizmente não tenho outros modelos da bematech para testar. Dessa forma, no momento só garanto suporte a esse modelo com placa de rede. USB infelizmente não testei também. Se a bematech me der outros modelos, posso fazer o porte para essas impressoras.
 
 ### O que é necessário?
 Por questões de segurança, você não conseguirá realizar a impressão diretamente de um browser. Para isso foi necessário criar uma aplicação nativa. Como eu tenho experiência em Node e conhecia o Electron( que é do github inclusive), acabei criando uma aplicação nativa utilizando essas 2 tecnologias. Com o Node.js fica mais fácil ainda, pois é utilizando um socket para realizar a comunicação entre o aplicativo nativo criado a partir do electron com a sua página web, de onde você irá chamar a impressão
@@ -60,14 +60,11 @@ Abaixo há a lista dos atributos e valores possíveis, lembrando que você pode 
 <line textTransform="underline">Texto com sublinhado</line>
 <line fontSize="expanded">Texto com fonte expandida</line>
 <line fontSize="large">Texto com fonte larga</line>
+<line display="inline">Evita quebra de linha</line>
 ```
 
 #### Quebra de linha
-Basta utilizar um elemento <line /> vazio:
-
-```xml
-<line></line>
-```
+Por padrão, todos os elementos ```<line></line>``` possuem um comportamento do tipo 'block', ou seja, se você colocar outro line, automaticamente será quebrado a linha. Se você deseja preservar a linha, indique o atributo display="inline", nos mesmos moldes do CSS.
 
 #### Observações gerais:
 Sempre que definido uma propriedade, a formatação é aplicada somente a linha atual.
