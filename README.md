@@ -17,7 +17,47 @@ Imprimir em impressoras térmicas é uma tarefa mais complicada, pois basicament
 2. Instale o [Electron](https://electron.atom.io/)
 3. Instale o [Electron packager](https://github.com/electron-userland/electron-packager)
 
-Abra seu terminal e digite `npm start`. Será aberto de forma automática o programa criado no electron, conforme imagem abaixo:
+Abra seu terminal e digite `npm start`. Será aberto de forma automática o programa criado no electron.
+
+Para testar, abra o arquivo demo.html. Foi criado uma pagina web utilizando angular 1 para demonstrar como utilizar.
+
+Basicamente para imprimir é necessário:
+1. Conectar com o socket (e com o programa electron)
+2. Enviar um socket com os dados da impressão (template, n'úmero de copias e dados extras)
+3. O template basta você criar um arquivo XML na pasta /bematech/layouts/seuarquivo.xml. Na hora de imprimir, basta indicar o nome do template, sem a extensão XML.
+
+***
+## Comandos XML
+
+#### Root
+Seu arquivo XML deve sempre iniciar com o elemento <root></root>. O root serve como um <html></html>, e indica o inicio de uma pagina. Nele há os seguintes atributos:
+
+- <root cut="full"> -> Apos a impressão, sera feito o corte total do papel.
+- <root cut="half"> -> Apos a impressão, ser'á feito o corte parcial do papel.
+-
+#### Line
+O elemento <line></line> indica uma linha da pagina. Basicamente você trabalhará bastante com esse elemento, e é nele que você fará toda formatação de texto.
+
+Para facilitar, utilizamos os atributos baseados nas propriedades CSS: Align, textTransform e fontSize.
+
+Abaixo há a lista dos atributos e valores possíveis, lembrando que você pode repetir atributos para setar mais de um estilo (por exemplo, paa setar um texto negrito e itálico ao mesmo tempo).
+
+- <line align="left">Texto alinhado à esquerda</line>
+- <line align="left">Texto alinhado ao centro</line>
+- <line align="left">Texto alinhado à direita</line>
+- <line textTransform="bold">Texto em negrito</line>
+- <line textTransform="italic">Texto em itálico</line>
+- <line textTransform="underline">Texto com sublinhado</line>
+- <line fontSize="expanded">Texto com fonte expandida</line>
+- <line fontSize="large">Texto com fonte larga</line>
+
+#### Quebra de linha
+Basta utilizar um elemento <line /> vazio:
+
+- <line></line>
+
+#### Observações gerais:
+Sempre que definido uma propriedade, a formatação é aplicada somente a linha atual.
 
 ***
 
