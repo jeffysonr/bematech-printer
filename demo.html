@@ -1,0 +1,91 @@
+<html ng-app="app">
+  <head>
+    <title>Bematech printer: Hello world</title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+    <script src="assets/vendor/socket.io/socket.io.js"></script>
+    <script src="assets/vendor/angular/angular.js"></script>
+  </head>
+  <body ng-controller="appController">
+    <div class="container" style="margin-top: 30px;">
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-success btn-lg" ng-click="connect()" ng-disabled="socket && socket.connected">
+            Conectar com impressora
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-success btn-lg" ng-click="disconnect()" ng-disabled="!socket || !socket.disconnected">
+            Desconectar
+          </button>
+        </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <label for="">Contéudo dinâmico</label>
+      <input type="text" class="form-control" ng-model="helloMessage" />
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-success btn-lg" ng-click="print({ layout: 'teste'})"  ng-disabled="!socket && !socket.disconnected">
+            Imprimir modelo de impressão
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-success btn-lg" ng-click="print({ layout: 'hello'})"  ng-disabled="!socket && !socket.disconnected">
+            Imprimir modelo dinâmico
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script>
+
+
+      let controller = ($scope, $filter, $timeout, $window) => {
+        $scope.socket = {   };
+        $scope.helloMessage = 'Olá mundo'
+        $scope.appAddress = 'http://localhost:7333'
+        $scope.printer = {
+          ip: '1.1.1.51',
+          port: 9000
+        };
+
+        $scope.connect = () => {
+          if(!$scope.socket.connected) {
+            $scope.socket = io($scope.appAddress);
+
+            $scope.socket.on('socket:connected', () => {
+              alert('conectado a impressora')
+            })
+
+            // Adiciona evento de erro
+            $scope.socket.on('print:error', (data) => {
+              console.log('erro', data.type);
+              console.log('descrição', data.description);
+            });
+          }
+        };
+
+        $scope.disconnect = () => {
+          $scope.socket = {};
+        };
+
+        $scope.print = (params) => {
+          $scope.socket.emit('print', {
+            layout: params.layout,
+            copies: 1,
+            printer: $scope.printer,
+            data: {
+              hello: $scope.helloMessage
+            }
+          });
+        };
+      };
+
+      angular.module('app', []).controller('appController', controller);
+    </script>
+  </body>
+</html>
