@@ -32,9 +32,11 @@ Basicamente para imprimir é necessário:
 #### Root
 Seu arquivo XML deve sempre iniciar com o elemento <root></root>. O root serve como um <html></html>, e indica o inicio de uma pagina. Nele há os seguintes atributos:
 
-- <root cut="full"> -> Apos a impressão, sera feito o corte total do papel.
-- <root cut="half"> -> Apos a impressão, ser'á feito o corte parcial do papel.
--
+```xml
+<root cut="full"> -> Apos a impressão, sera feito o corte total do papel.
+<root cut="half"> -> Apos a impressão, ser'á feito o corte parcial do papel.
+```
+
 #### Line
 O elemento <line></line> indica uma linha da pagina. Basicamente você trabalhará bastante com esse elemento, e é nele que você fará toda formatação de texto.
 
@@ -42,19 +44,23 @@ Para facilitar, utilizamos os atributos baseados nas propriedades CSS: Align, te
 
 Abaixo há a lista dos atributos e valores possíveis, lembrando que você pode repetir atributos para setar mais de um estilo (por exemplo, paa setar um texto negrito e itálico ao mesmo tempo).
 
-- <line align="left">Texto alinhado à esquerda</line>
-- <line align="left">Texto alinhado ao centro</line>
-- <line align="left">Texto alinhado à direita</line>
-- <line textTransform="bold">Texto em negrito</line>
-- <line textTransform="italic">Texto em itálico</line>
-- <line textTransform="underline">Texto com sublinhado</line>
-- <line fontSize="expanded">Texto com fonte expandida</line>
-- <line fontSize="large">Texto com fonte larga</line>
+```xml
+<line align="left">Texto alinhado à esquerda</line>
+<line align="left">Texto alinhado ao centro</line>
+<line align="left">Texto alinhado à direita</line>
+<line textTransform="bold">Texto em negrito</line>
+<line textTransform="italic">Texto em itálico</line>
+<line textTransform="underline">Texto com sublinhado</line>
+<line fontSize="expanded">Texto com fonte expandida</line>
+<line fontSize="large">Texto com fonte larga</line>
+```
 
 #### Quebra de linha
 Basta utilizar um elemento <line /> vazio:
 
-- <line></line>
+```xml
+<line></line>
+```
 
 #### Observações gerais:
 Sempre que definido uma propriedade, a formatação é aplicada somente a linha atual.
