@@ -5,11 +5,14 @@
 ### Por quê?
 Tive a necessidade de integrar uma aplicação web com uma impressora térmica. Acabei escolhendo a bematech, por ser uma das líderes de mercado nesse setor. Na hora de desenvolver, senti que há uma carência na integração com a web, já que é algo mais avançado. Dessa forma foi criado esse pacote para você conseguir imprimir em sua bematech de um dispositivo na web.
 
+### Onde testei
+No momento testei apenas na bematech 4200 com placa Ethernet. Infelizmente não tenho outros modelos da bematech para testar. Dessa forma, no momento só garanto suporte a esse modelo com placa de rede. USB infelizmente não testei também.
+
 ### O que é necessário?
 Por questões de segurança, você não conseguirá realizar a impressão diretamente de um browser. Para isso foi necessário criar uma aplicação nativa. Como eu tenho experiência em Node e conhecia o Electron( que é do github inclusive), acabei criando uma aplicação nativa utilizando essas 2 tecnologias. Com o Node.js fica mais fácil ainda, pois é utilizando um socket para realizar a comunicação entre o aplicativo nativo criado a partir do electron com a sua página web, de onde você irá chamar a impressão
 
 ### Como foi feito?
-Imprimir em impressoras térmicas é uma tarefa mais complicada, pois basicamente é necessário escovar bits. Basicamente o que fiz foi mapear os comandos da documentação das impressoras da bematech e ler eles através de um arquivo XML. Para isso foi criado um compilador, que irá ler o que você deseja imprimir e transformar isso nos bits que a impressora da bematech entende.
+Imprimir em impressoras térmicas é uma tarefa mais complicada, pois basicamente é necessário escovar bits. Basicamente o que fiz foi mapear os comandos da documentação das impressoras da bematech e ler eles através de um arquivo XML. Para tornar esse XML dinâmico, adicionei o pacote [Handlebars](http://handlebarsjs.com/). Para isso foi criado um compilador, que irá ler o que você deseja imprimir e transformar isso nos bits que a impressora da bematech entende.
 
 ***
 ## Como testar?
@@ -19,12 +22,16 @@ Imprimir em impressoras térmicas é uma tarefa mais complicada, pois basicament
 
 Abra seu terminal e digite `npm start`. Será aberto de forma automática o programa criado no electron.
 
-Para testar, abra o arquivo demo.html. Foi criado uma pagina web utilizando angular 1 para demonstrar como utilizar.
+Para testar, abra o arquivo demo.html. Foi criado uma pagina web utilizando angular 1 para demonstrar como utilizar. Nesse arquivo há as configurações da impressora. **Será necessário alterar o IP da impressora para você conseguir conectar. Você deve consultar o IP da sua impressora térmica e alterar no arquivo demo.html. A porta, por padrão, será sempre 9100**.
 
 Basicamente para imprimir é necessário:
 1. Conectar com o socket (e com o programa electron)
-2. Enviar um socket com os dados da impressão (template, n'úmero de copias e dados extras)
+2. Enviar um socket com os dados da impressão (ip da impressora, porta de impressora, template, número de copias e dados extras)
 3. O template basta você criar um arquivo XML na pasta /bematech/layouts/seuarquivo.xml. Na hora de imprimir, basta indicar o nome do template, sem a extensão XML.
+
+## Editando os templates básicos
+1. Acesse a pasta /bematech/layouts/ e edite livremente. Tome cuidado com a sintaxe.. se houver erros, a impressão não será realizada.
+2. Nesse XML  você pode utilizar templates através do handlebars... se não sabe como trabalhar com handlebars, procure a documentação (é bem simples)
 
 ***
 ## Comandos XML
